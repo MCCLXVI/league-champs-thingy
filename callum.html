@@ -17,7 +17,7 @@
             text-align: center;
         }
         img {
-            max-width: 100px; 
+            max-width: 100px;
             height: auto;
         }
     </style>
@@ -32,10 +32,10 @@
             </tr>
         </thead>
         <tbody id="tableBody">
-        
+       
         </tbody>
     </table>
-    
+   
     <script>
         const tableBody = document.getElementById('tableBody');
         const images = [
@@ -43,7 +43,7 @@
             'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion_Sol.png',
             'Aurora.png', 'Azir.png', 'Bard.png', 'BelVeth.png', 'Blitzcrank.png',
             'Brand.png', 'Braum.png', 'Briar.png', 'Caitlyn.png', 'Camille.png',
-            'Cassiopeia.png', 'ChoGath.png', 'Corki.png', 'Darius.png', 'Diana.png',
+            'Cassiopeia.png', 'Chogath.png', 'Corki.png', 'Darius.png', 'Diana.png',
             'Dr._Mundo.png', 'Draven.png', 'Ekko.png', 'Elise.png', 'Evelynn.png',
             'Ezreal.png', 'Fiddlesticks.png', 'Fiora.png', 'Fizz.png', 'Galio.png',
             'Gangplank.png', 'Garen.png', 'Gnar.png', 'Gragas.png', 'Graves.png',
@@ -74,22 +74,22 @@
             'Zac.png', 'Zed.png', 'Zeri.png', 'Ziggs.png', 'Zilean.png',
             'Zoe.png', 'Zyra.png'
         ];
-
+ 
         images.forEach(image => {
             const row = document.createElement('tr');
             const championCell = document.createElement('td');
             const gamesPlayedCell = document.createElement('td');
             const winrateCell = document.createElement('td');
-
+ 
             const championImg = document.createElement('img');
-            championImg.src = `${image}`; 
+            championImg.src = `/PNG images/${image}`;
             championImg.alt = image;
             championCell.appendChild(championImg);
-
+ 
             row.appendChild(championCell);
-            row.appendChild(gamesPlayedCell); 
-            row.appendChild(winrateCell); 
-
+            row.appendChild(gamesPlayedCell);
+            row.appendChild(winrateCell);
+ 
             tableBody.appendChild(row);
         });
     </script>
