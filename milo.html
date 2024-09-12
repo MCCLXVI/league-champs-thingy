@@ -17,7 +17,7 @@
             text-align: center;
         }
         img {
-            max-width: 100%;
+            max-width: 100px;
             height: auto;
         }
     </style>
@@ -31,67 +31,70 @@
                 <th>Winrate</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td><img src="Aatrox.png" alt="Image 1"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
+        <tbody id="tableBody">
        
-            </tr>
-                <td><img src="Zyra.png" alt="Image 2"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 3"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 4"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 5"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 6"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 7"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 8"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 9"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 10"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-                <td><img src="Zyra.png" alt="Image 11"></td>
-                <td><img src="" alt=""></td>
-                <td><img src="" alt=""></td>
-
-             </tr>
-            <!-- Add more rows as needed -->
         </tbody>
     </table>
+   
+    <script>
+        const tableBody = document.getElementById('tableBody');
+        const images = [
+            'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
+            'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion_Sol.png',
+            'Aurora.png', 'Azir.png', 'Bard.png', 'Bel%27Veth.png', 'Blitzcrank.png',
+            'Brand.png', 'Braum.png', 'Briar.png', 'Caitlyn.png', 'Camille.png',
+            'Cassiopeia.png', 'Cho%27Gath.png', 'Corki.png', 'Darius.png', 'Diana.png',
+            'Dr._Mundo.png', 'Draven.png', 'Ekko.png', 'Elise.png', 'Evelynn.png',
+            'Ezreal.png', 'Fiddlesticks.png', 'Fiora.png', 'Fizz.png', 'Galio.png',
+            'Gangplank.png', 'Garen.png', 'Gnar.png', 'Gragas.png', 'Graves.png',
+            'Gwen.png', 'Hecarim.png', 'Heimerdinger.png', 'Hwei.png', 'Illaoi.png',
+            'Irelia.png', 'Ivern.png', 'Janna.png', 'Jarvan_IV.png', 'Jax.png',
+            'Jayce.png', 'Jhin.png', 'Jinx.png', 'K%27Sante.png', 'Kai%27Sa.png',
+            'Kalista.png', 'Karma.png', 'Karthus.png', 'Kassadin.png', 'Katarina.png',
+            'Kayle.png', 'Kayn.png', 'Kennen.png', 'Kha%27Zix.png', 'Kindred.png',
+            'Kled.png', 'Kog%27Maw.png', 'LeBlanc.png', 'Lee_Sin.png', 'Leona.png',
+            'Lillia.png', 'Lissandra.png', 'Lucian.png', 'Lulu.png', 'Lux.png',
+            'Malphite.png', 'Malzahar.png', 'Maokai.png', 'Master_Yi.png', 'Milio.png',
+            'Miss_Fortune.png', 'Mordekaiser.png', 'Morgana.png', 'Naafiri.png', 'Nami.png',
+            'Nasus.png', 'Nautilus.png', 'Neeko.png', 'Nidalee.png', 'Nilah.png',
+            'Nocturne.png', 'Nunu.png', 'Olaf.png', 'Orianna.png', 'Ornn.png',
+            'Pantheon.png', 'Poppy.png', 'Pyke.png', 'Qiyana.png', 'Quinn.png',
+            'Rakan.png', 'Rammus.png', 'Rek%27Sai.png', 'Rell.png', 'Renata_Glasc.png',
+            'Renekton.png', 'Rengar.png', 'Riven.png', 'Rumble.png', 'Ryze.png',
+            'Samira.png', 'Sejuani.png', 'Senna.png', 'Seraphine.png', 'Sett.png',
+            'Shaco.png', 'Shen.png', 'Shyvana.png', 'Singed.png', 'Sion.png',
+            'Sivir.png', 'Skarner.png', 'Smolder.png', 'Sona.png', 'Soraka.png',
+            'Swain.png', 'Sylas.png', 'Syndra.png', 'Tahm_Kench.png', 'Taliyah.png',
+            'Talon.png', 'Taric.png', 'Teemo.png', 'Thresh.png', 'Tristana.png',
+            'Trundle.png', 'Tryndamere.png', 'Twisted_Fate.png', 'Twitch.png', 'Udyr.png',
+            'Urgot.png', 'Varus.png', 'Vayne.png', 'Veigar.png', 'Vel%27Koz.png',
+            'Vex.png', 'Vi.png', 'Viego.png', 'Viktor.png', 'Vladimir.png',
+            'Volibear.png', 'Warwick.png', 'Wukong.png', 'Xayah.png', 'Xerath.png',
+            'Xin_Zhao.png', 'Yasuo.png', 'Yone.png', 'Yorick.png', 'Yuumi.png',
+            'Zac.png', 'Zed.png', 'Zeri.png', 'Ziggs.png', 'Zilean.png',
+            'Zoe.png', 'Zyra.png'
+        ];
+ 
+        images.forEach(image => {
+            const row = document.createElement('tr');
+            const championCell = document.createElement('td');
+            const gamesPlayedCell = document.createElement('td');
+            const winrateCell = document.createElement('td');
+ 
+            const championImg = document.createElement('img');
+            championImg.src = `${image}`;
+            championImg.alt = image;
+            championCell.appendChild(championImg);
+ 
+            row.appendChild(championCell);
+            row.appendChild(gamesPlayedCell);
+            row.appendChild(winrateCell);
+ 
+            tableBody.appendChild(row);
+        });
+    </script>
 </body>
 </html>
+ 
  
  
