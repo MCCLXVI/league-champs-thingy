@@ -1,5 +1,5 @@
 # Champ tracker
-# This will be used to store all of me and mealos data from league matches as we are completing a challenge 
+# This will be used to store all of me and milo's data from league matches as we are completing a challenge 
 
 To do list:
 - Add nav bar to all tables
