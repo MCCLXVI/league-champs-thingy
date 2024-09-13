@@ -3,98 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Images in Table</title>
+    <title>Champion Stats Table</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            margin: 0;
+        }
+
+        .navbar button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .navbar button:hover {
+            background-color: #777;
+        }
+
         table {
             width: 100%;
+            max-width: 1200px;
             border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.2em;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-        table, th, td {
-            border: 1px solid black;
+
+        table thead tr {
+            background-color: #3498db;
+            color: #ffffff;
+            text-align: left;
+            cursor: pointer;
         }
-        th, td {
-            padding: 10px;
-            text-align: center;
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
         }
-        img {
-            max-width: 100px;
-            height: auto;
+
+        table th {
+            width: 50px; 
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #3498db;
+        }
+
+        table tbody tr:hover {
+            background-color: #e1e1e1; 
+
+        .champion-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .champion-name {
+            display: flex;
+            align-items: center;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+
+        .ascending::after {
+            content: ' ▲';
+        }
+
+        .descending::after {
+            content: ' ▼';
         }
     </style>
 </head>
 <body>
-    <table>
+
+    <div class="navbar">
+        <h1>Champion Stats Table</h1>
+        <a href="too be added to main project.html">
+            <button>Back to Main Page</button>
+        </a>
+    </div>
+
+    <table id="championTable">
         <thead>
             <tr>
-                <th>Champions</th>
-                <th>Games played</th>
-                <th>Winrate</th>
+                <th id="rankHeader" class="sortable">Rank</th> 
+                <th>Champion</th>
+                <th>KDA</th>
+                <th>Games Played</th>
+                <th>Win Rate</th>
             </tr>
         </thead>
         <tbody id="tableBody">
-       
+            
         </tbody>
     </table>
-   
+
     <script>
-        const tableBody = document.getElementById('tableBody');
-        const images = [
-            'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
-            'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion_Sol.png',
-            'Aurora.png', 'Azir.png', 'Bard.png', 'BelVeth.png', 'Blitzcrank.png',
-            'Brand.png', 'Braum.png', 'Briar.png', 'Caitlyn.png', 'Camille.png',
-            'Cassiopeia.png', 'Chogath.png', 'Corki.png', 'Darius.png', 'Diana.png',
-            'Dr._Mundo.png', 'Draven.png', 'Ekko.png', 'Elise.png', 'Evelynn.png',
-            'Ezreal.png', 'Fiddlesticks.png', 'Fiora.png', 'Fizz.png', 'Galio.png',
-            'Gangplank.png', 'Garen.png', 'Gnar.png', 'Gragas.png', 'Graves.png',
-            'Gwen.png', 'Hecarim.png', 'Heimerdinger.png', 'Hwei.png', 'Illaoi.png',
-            'Irelia.png', 'Ivern.png', 'Janna.png', 'Jarvan_IV.png', 'Jax.png',
-            'Jayce.png', 'Jhin.png', 'Jinx.png', 'KSante.png', 'KaiSa.png',
-            'Kalista.png', 'Karma.png', 'Karthus.png', 'Kassadin.png', 'Katarina.png',
-            'Kayle.png', 'Kayn.png', 'Kennen.png', 'KhaZix.png', 'Kindred.png',
-            'Kled.png', 'KogMaw.png', 'LeBlanc.png', 'Lee_Sin.png', 'Leona.png',
-            'Lillia.png', 'Lissandra.png', 'Lucian.png', 'Lulu.png', 'Lux.png',
-            'Malphite.png', 'Malzahar.png', 'Maokai.png', 'Master_Yi.png', 'Milio.png',
-            'Miss_Fortune.png', 'Mordekaiser.png', 'Morgana.png', 'Naafiri.png', 'Nami.png',
-            'Nasus.png', 'Nautilus.png', 'Neeko.png', 'Nidalee.png', 'Nilah.png',
-            'Nocturne.png', 'Nunu.png', 'Olaf.png', 'Orianna.png', 'Ornn.png',
-            'Pantheon.png', 'Poppy.png', 'Pyke.png', 'Qiyana.png', 'Quinn.png',
-            'Rakan.png', 'Rammus.png', 'RekSai.png', 'Rell.png', 'Renata_Glasc.png',
-            'Renekton.png', 'Rengar.png', 'Riven.png', 'Rumble.png', 'Ryze.png',
-            'Samira.png', 'Sejuani.png', 'Senna.png', 'Seraphine.png', 'Sett.png',
-            'Shaco.png', 'Shen.png', 'Shyvana.png', 'Singed.png', 'Sion.png',
-            'Sivir.png', 'Skarner.png', 'Smolder.png', 'Sona.png', 'Soraka.png',
-            'Swain.png', 'Sylas.png', 'Syndra.png', 'Tahm_Kench.png', 'Taliyah.png',
-            'Talon.png', 'Taric.png', 'Teemo.png', 'Thresh.png', 'Tristana.png',
-            'Trundle.png', 'Tryndamere.png', 'Twisted_Fate.png', 'Twitch.png', 'Udyr.png',
-            'Urgot.png', 'Varus.png', 'Vayne.png', 'Veigar.png', 'VelKoz.png',
-            'Vex.png', 'Vi.png', 'Viego.png', 'Viktor.png', 'Vladimir.png',
-            'Volibear.png', 'Warwick.png', 'Wukong.png', 'Xayah.png', 'Xerath.png',
-            'Xin_Zhao.png', 'Yasuo.png', 'Yone.png', 'Yorick.png', 'Yuumi.png',
-            'Zac.png', 'Zed.png', 'Zeri.png', 'Ziggs.png', 'Zilean.png',
-            'Zoe.png', 'Zyra.png'
-        ];
- 
-        images.forEach(image => {
-            const row = document.createElement('tr');
-            const championCell = document.createElement('td');
-            const gamesPlayedCell = document.createElement('td');
-            const winrateCell = document.createElement('td');
- 
-            const championImg = document.createElement('img');
-            championImg.src = `/PNG images/${image}`;
-            championImg.alt = image;
-            championCell.appendChild(championImg);
- 
-            row.appendChild(championCell);
-            row.appendChild(gamesPlayedCell);
-            row.appendChild(winrateCell);
- 
-            tableBody.appendChild(row);
+        document.addEventListener("DOMContentLoaded", () => {
+            const rankHeader = document.getElementById("rankHeader");
+            const table = document.getElementById("championTable").getElementsByTagName("tbody")[0];
+            let ascending = true;
+
+            
+            const champions = [
+                'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
+                'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion_Sol.png',
+                'Aurora.png', 'Azir.png', 'Bard.png', 'BelVeth.png', 'Blitzcrank.png',
+                'Brand.png', 'Braum.png', 'Briar.png', 'Caitlyn.png', 'Camille.png',
+                'Cassiopeia.png', 'Chogath.png', 'Corki.png', 'Darius.png', 'Diana.png',
+                'Dr._Mundo.png', 'Draven.png', 'Ekko.png', 'Elise.png', 'Evelynn.png',
+                'Ezreal.png', 'Fiddlesticks.png', 'Fiora.png', 'Fizz.png', 'Galio.png',
+                'Gangplank.png', 'Garen.png', 'Gnar.png', 'Gragas.png', 'Graves.png',
+                'Gwen.png', 'Hecarim.png', 'Heimerdinger.png', 'Hwei.png', 'Illaoi.png',
+                'Irelia.png', 'Ivern.png', 'Janna.png', 'Jarvan_IV.png', 'Jax.png',
+                'Jayce.png', 'Jhin.png', 'Jinx.png', 'KSante.png', 'KaiSa.png',
+                'Kalista.png', 'Karma.png', 'Karthus.png', 'Kassadin.png', 'Katarina.png',
+                'Kayle.png', 'Kayn.png', 'Kennen.png', 'KhaZix.png', 'Kindred.png',
+                'Kled.png', 'KogMaw.png', 'LeBlanc.png', 'Lee_Sin.png', 'Leona.png',
+                'Lillia.png', 'Lissandra.png', 'Lucian.png', 'Lulu.png', 'Lux.png',
+                'Malphite.png', 'Malzahar.png', 'Maokai.png', 'Master_Yi.png', 'Milio.png',
+                'Miss_Fortune.png', 'Mordekaiser.png', 'Morgana.png', 'Naafiri.png', 'Nami.png',
+                'Nasus.png', 'Nautilus.png', 'Neeko.png', 'Nidalee.png', 'Nilah.png',
+                'Nocturne.png', 'Nunu.png', 'Olaf.png', 'Orianna.png', 'Ornn.png',
+                'Pantheon.png', 'Poppy.png', 'Pyke.png', 'Qiyana.png', 'Quinn.png',
+                'Rakan.png', 'Rammus.png', 'RekSai.png', 'Rell.png', 'Renata_Glasc.png',
+                'Renekton.png', 'Rengar.png', 'Riven.png', 'Rumble.png', 'Ryze.png',
+                'Samira.png', 'Sejuani.png', 'Senna.png', 'Seraphine.png', 'Sett.png',
+                'Shaco.png', 'Shen.png', 'Shyvana.png', 'Singed.png', 'Sion.png',
+                'Sivir.png', 'Skarner.png', 'Smolder.png', 'Sona.png', 'Soraka.png',
+                'Swain.png', 'Sylas.png', 'Syndra.png', 'Tahm_Kench.png', 'Taliyah.png',
+                'Talon.png', 'Taric.png', 'Teemo.png', 'Thresh.png', 'Tristana.png',
+                'Trundle.png', 'Tryndamere.png', 'Twisted_Fate.png', 'Twitch.png', 'Udyr.png',
+                'Urgot.png', 'Varus.png', 'Vayne.png', 'Veigar.png', 'VelKoz.png',
+                'Vex.png', 'Vi.png', 'Viego.png', 'Viktor.png', 'Vladimir.png',
+                'Volibear.png', 'Warwick.png', 'Wukong.png', 'Xayah.png', 'Xerath.png',
+                'Xin_Zhao.png', 'Yasuo.png', 'Yone.png', 'Yorick.png', 'Yuumi.png',
+                'Zac.png', 'Zed.png', 'Zeri.png', 'Ziggs.png', 'Zilean.png',
+                'Zoe.png', 'Zyra.png'
+            ];
+
+            
+            champions.forEach((img, index) => {
+                const row = document.createElement('tr');
+
+                
+                const rankCell = document.createElement('td');
+                rankCell.textContent = index + 1; 
+                row.appendChild(rankCell);
+
+                const championCell = document.createElement('td');
+                const championImg = document.createElement('img');
+                championImg.src = `/PNG images/${img}`;
+                championImg.alt = img.split('.').slice(0, -1).join('.');
+                championImg.classList.add('champion-icon');
+                const championNameSpan = document.createElement('span');
+                championNameSpan.textContent = img.split('.').slice(0, -1).join('.');
+                championCell.appendChild(championImg);
+                championCell.appendChild(championNameSpan);
+                row.appendChild(championCell);
+
+            
+                const kdaCell = document.createElement('td');
+                row.appendChild(kdaCell);
+
+                const gamesPlayedCell = document.createElement('td');
+                row.appendChild(gamesPlayedCell);
+
+                const winRateCell = document.createElement('td');
+                row.appendChild(winRateCell);
+
+                table.appendChild(row);
+            });
+
+            rankHeader.addEventListener("click", () => {
+                let rows = Array.from(table.rows);
+                rows.sort((row1, row2) => {
+                    const rank1 = parseInt(row1.cells[0].textContent.trim());
+                    const rank2 = parseInt(row2.cells[0].textContent.trim());
+                    return ascending ? rank1 - rank2 : rank2 - rank1;
+                });
+
+                while (table.firstChild) {
+                    table.removeChild(table.firstChild);
+                }
+
+
+                rows.forEach(row => table.appendChild(row));
+
+                ascending = !ascending;
+                rankHeader.classList.toggle("ascending", ascending);
+                rankHeader.classList.toggle("descending", !ascending);
+            });
         });
     </script>
+
 </body>
 </html>
- 
- 
- 
