@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Champion Stats Table</title>
+    <title>Callum Champion Stats Table</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,7 +84,8 @@
         }
 
         table tbody tr:hover {
-            background-color: #e1e1e1; 
+            background-color: #e1e1e1;
+        }
 
         .champion-icon {
             width: 30px;
@@ -114,7 +115,7 @@
 <body>
 
     <div class="navbar">
-        <h1>Milo champion Stats Table</h1>
+        <h1>Milo champion stats table</h1>
         <a href="too be added to main project.html">
             <button>Back to Main Page</button>
         </a>
@@ -141,7 +142,6 @@
             const table = document.getElementById("championTable").getElementsByTagName("tbody")[0];
             let ascending = true;
 
-            
             const champions = [
                 'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
                 'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion_Sol.png',
@@ -179,27 +179,27 @@
                 'Zoe.png', 'Zyra.png'
             ];
 
-            
             champions.forEach((img, index) => {
                 const row = document.createElement('tr');
 
-                
                 const rankCell = document.createElement('td');
-                rankCell.textContent = index + 1; 
+                rankCell.textContent = index + 1;
                 row.appendChild(rankCell);
 
                 const championCell = document.createElement('td');
                 const championImg = document.createElement('img');
-                championImg.src = `/PNG images/${img}`;
+                championImg.src = `./PNG images/${img}`; // Adjusted path
                 championImg.alt = img.split('.').slice(0, -1).join('.');
                 championImg.classList.add('champion-icon');
+                championImg.onerror = () => {
+                    console.error(`Image failed to load: ${championImg.src}`);
+                };
                 const championNameSpan = document.createElement('span');
                 championNameSpan.textContent = img.split('.').slice(0, -1).join('.');
                 championCell.appendChild(championImg);
                 championCell.appendChild(championNameSpan);
                 row.appendChild(championCell);
 
-            
                 const kdaCell = document.createElement('td');
                 row.appendChild(kdaCell);
 
@@ -223,7 +223,6 @@
                 while (table.firstChild) {
                     table.removeChild(table.firstChild);
                 }
-
 
                 rows.forEach(row => table.appendChild(row));
 
