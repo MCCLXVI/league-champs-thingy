@@ -10,3 +10,5 @@ To do list:
 - Link the github in the about page and maybe other socials
 - Link the edgar website in the about page
 - fav icon
+- Sort out hosting
+- Clean up code and files
