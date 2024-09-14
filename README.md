@@ -8,7 +8,8 @@ To do list:
 - Make an items page
 - Create an about page
 - Link the github in the about page and maybe other socials
-- Do not link the edgar website in the about page
+- Do not link the edgar website in the about page (add it back milo lol)
 - fav icon
 - Sort out hosting
 - Clean up code and files
+- remake the site using react and all that jazz
