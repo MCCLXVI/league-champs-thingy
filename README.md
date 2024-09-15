@@ -1,6 +1,6 @@
 # Champ tracker
 # This will be used to store all of me and milo's data from league matches as we are completing a challenge 
-# Downloading the excel file is vital and you can store your own data with it as you can choose what file you use to display your data with.
+# Downloading the excel file is vital as you can store your own data with it as you can choose what file you use to display your data with.
 
 To do list:
 - Add nav bar to all tables
