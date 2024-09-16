@@ -13,7 +13,6 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-
             color: #fff;
         }
 
@@ -117,10 +116,14 @@
 <body>
 
     <div class="navbar">
-        <h1>Milo champion stats table</h1>
+        <h1>Callum Champion Stats Table</h1>
         <a href="Hub.html">
             <button>Back to Main Page</button>
         </a>
+    </div>
+
+    <div>
+        <input type="file" id="fileInput1" accept=".xlsx" />
     </div>
 
     <table id="championTable">
@@ -130,22 +133,25 @@
                 <th>Champion</th>
                 <th>KDA</th>
                 <th>Games Played</th>
-                <th>Win Rate</th>
+                <th>W</th>
+                <th>L</th>
+                <th>Win Percentage</th>
             </tr>
         </thead>
         <tbody id="tableBody">
-            
+        
         </tbody>
     </table>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const rankHeader = document.getElementById("rankHeader");
-            const table = document.getElementById("championTable").getElementsByTagName("tbody")[0];
-            let ascending = true;
+    const fileInput1 = document.getElementById('fileInput1');
+    const tableBody = document.getElementById('tableBody');
+    const rankHeader = document.getElementById('rankHeader');
+    let ascending = true;
 
-            const champions = [
-                'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
+    const championList = [
+    'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
                 'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion Sol.png',
                 'Aurora.png', 'Azir.png', 'Bard.png', 'BelVeth.png', 'Blitzcrank.png',
                 'Brand.png', 'Braum.png', 'Briar.png', 'Caitlyn.png', 'Camille.png',
@@ -179,61 +185,118 @@
                 'Xin Zhao.png', 'Yasuo.png', 'Yone.png', 'Yorick.png', 'Yuumi.png',
                 'Zac.png', 'Zed.png', 'Zeri.png', 'Ziggs.png', 'Zilean.png',
                 'Zoe.png', 'Zyra.png'
-            ];
+    ];
 
-            champions.forEach((img, index) => {
-                const row = document.createElement('tr');
+    let currentData = championList.map((image, index) => {
+        const name = image.replace(/_/g, ' ').replace('.png', '').replace(/([A-Z])/g, ' $1').trim();
+        return [index + 1, image, name, '', '', '', '', '', ''];  
+    });
 
-                const rankCell = document.createElement('td');
-                rankCell.textContent = index + 1;
-                row.appendChild(rankCell);
+    function populateTable(data) {
+        tableBody.innerHTML = '';
 
-                const championCell = document.createElement('td');
-                const championImg = document.createElement('img');
-                championImg.src = `./PNG images/${img}`; // Adjusted path
-                championImg.alt = img.split('.').slice(0, -1).join('.');
-                championImg.classList.add('champion-icon');
-                championImg.onerror = () => {
-                    console.error(`Image failed to load: ${championImg.src}`);
-                };
-                const championNameSpan = document.createElement('span');
-                championNameSpan.textContent = img.split('.').slice(0, -1).join('.');
-                championCell.appendChild(championImg);
-                championCell.appendChild(championNameSpan);
-                row.appendChild(championCell);
+        data.forEach(row => {
+            const tableRow = document.createElement('tr');
 
-                const kdaCell = document.createElement('td');
-                row.appendChild(kdaCell);
+            const rankCell = document.createElement('td');
+            rankCell.textContent = row[0]; 
 
-                const gamesPlayedCell = document.createElement('td');
-                row.appendChild(gamesPlayedCell);
+            const championCell = document.createElement('td');
+            const championDiv = document.createElement('div');
+            championDiv.classList.add('champion-name');
+            const championImage = document.createElement('img');
+            championImage.src = 'PNG images/' + row[1]; 
+            championImage.alt = row[2];  
+            championImage.classList.add('champion-icon');
+            championDiv.appendChild(championImage);
+            const championName = document.createElement('span');
+            championName.textContent = row[2];  
+            championDiv.appendChild(championName);
+            championCell.appendChild(championDiv);
 
-                const winRateCell = document.createElement('td');
-                row.appendChild(winRateCell);
+            const kdaCell = document.createElement('td');
+            kdaCell.textContent = row[3] || '';  
 
-                table.appendChild(row);
-            });
+            const gamesCell = document.createElement('td');
+            gamesCell.textContent = row[4] || '';  
 
-            rankHeader.addEventListener("click", () => {
-                let rows = Array.from(table.rows);
-                rows.sort((row1, row2) => {
-                    const rank1 = parseInt(row1.cells[0].textContent.trim());
-                    const rank2 = parseInt(row2.cells[0].textContent.trim());
-                    return ascending ? rank1 - rank2 : rank2 - rank1;
-                });
+            const wCell = document.createElement('td');
+            const wins = parseInt(row[5]) || 0; 
+            wCell.textContent = wins;  
 
-                while (table.firstChild) {
-                    table.removeChild(table.firstChild);
-                }
+            const lCell = document.createElement('td');
+            const losses = parseInt(row[6]) || 0; 
+            lCell.textContent = losses;  
 
-                rows.forEach(row => table.appendChild(row));
+            const winPercentageCell = document.createElement('td');
+            const totalGames = wins + losses; 
+            if (totalGames > 0) {
+                const winPercentage = ((wins / totalGames) * 100).toFixed(2);
+                winPercentageCell.textContent = winPercentage + '%'; 
+            } else {
+                winPercentageCell.textContent = '0%';  
+            }
 
-                ascending = !ascending;
-                rankHeader.classList.toggle("ascending", ascending);
-                rankHeader.classList.toggle("descending", !ascending);
-            });
+            tableRow.appendChild(rankCell);
+            tableRow.appendChild(championCell);
+            tableRow.appendChild(kdaCell);
+            tableRow.appendChild(gamesCell);
+            tableRow.appendChild(wCell);
+            tableRow.appendChild(lCell);
+            tableRow.appendChild(winPercentageCell);
+
+            tableBody.appendChild(tableRow);
         });
-    </script>
+    }
 
+    function handleFile(fileInput, callback) {
+        const file = fileInput.files[0];
+
+        const reader = new FileReader();
+        reader.addEventListener("loadend", (e) => {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+            const filteredData = excelData.slice(1).map(row => [
+                row[0],  // Rank
+                row[1],  // Champion Image
+                row[2],  // Champion Name
+                row[3],  // KDA
+                row[4],  // Games Played
+                parseInt(row[5]) || 0, // Wins
+                parseInt(row[6]) || 0  // Losses
+            ]);
+
+            callback(filteredData);
+        });
+        reader.readAsArrayBuffer(file);
+    }
+
+    function updateTable() {
+        if (!fileInput1.files.length) return;
+
+        handleFile(fileInput1, (fileData) => {
+            currentData = fileData;
+
+            currentData = currentData
+                .filter((row, index, self) => self.findIndex(r => r[2] === row[2]) === index)
+                .sort((a, b) => a[0] - b[0]);
+
+            populateTable(currentData);
+        });
+    }
+
+    fileInput1.addEventListener('change', updateTable);
+
+    rankHeader.addEventListener('click', () => {
+        ascending = !ascending;
+        const sortedData = currentData.sort((a, b) => ascending ? a[0] - b[0] : b[0] - a[0]);
+        populateTable(sortedData);
+    });
+
+    populateTable(currentData);
+    </script>
 </body>
 </html>
