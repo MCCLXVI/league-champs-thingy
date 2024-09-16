@@ -3,21 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Images in Table</title>
+    <title>Callum Champion Stats Table</title>
     <style>
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         .navbar {
             background-color: #333;
             color: white;
+            width: 100%;
             padding: 15px;
             text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
+
         .navbar h1 {
             margin: 0;
         }
+
         .navbar button {
             background-color: #555;
             color: white;
@@ -27,50 +39,122 @@
             margin-top: 10px;
             border-radius: 5px;
         }
+
         .navbar button:hover {
             background-color: #777;
         }
+
         table {
             width: 100%;
+            max-width: 1200px;
             border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.2em;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
-        table, th, td {
-            border: 1px solid black;
+
+        table thead tr {
+            background-color: #3498db;
+            color: #ffffff;
+            text-align: left;
+            cursor: pointer;
         }
-        th, td {
-            padding: 10px;
-            text-align: center;
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
         }
-        img {
-            max-width: 100px;
-            height: auto;
+
+        table th {
+            width: 50px; 
         }
+
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #3498db;
+        }
+
+        table tbody tr:hover {
+            background-color: #e1e1e1;
+        }
+
+        .champion-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .champion-name {
+            display: flex;
+            align-items: center;
+        }
+
+        .sortable {
+            cursor: pointer;
+        }
+
+        .ascending::after {
+            content: ' ▲';
+        }
+
+        .descending::after {
+            content: ' ▼';
+        }
+
+        
     </style>
 </head>
 <body>
+
     <div class="navbar">
-        <h1>Combined Data Table</h1>
-        <a href="too be added to main project.html">
+        <h1>Combined Champion Stats Table</h1>
+        <a href="to-be-added-to-main-project.html">
             <button>Back to Main Page</button>
         </a>
     </div>
 
-    <table>
+    <div>
+        <input type="file" id="fileInput1" accept=".xlsx" />
+        <input type="file" id="fileInput2" accept=".xlsx" />
+    </div>
+
+    <table id="championTable">
         <thead>
             <tr>
-                <th>Champions</th>
-                <th>Games played</th>
-                <th>Winrate</th>
+                <th id="rankHeader" class="sortable">Rank</th> 
+                <th>Champion</th>
+                <th>KDA</th>
+                <th>Games Played</th>
+                <th>W</th>
+                <th>L</th>
+                <th>Win Percentage</th>
             </tr>
         </thead>
         <tbody id="tableBody">
+        
         </tbody>
     </table>
-   
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
-        const tableBody = document.getElementById('tableBody');
-        const images = [
-                'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
+    const fileInput1 = document.getElementById('fileInput1');
+    const fileInput2 = document.getElementById('fileInput2');
+    const tableBody = document.getElementById('tableBody');
+    const rankHeader = document.getElementById('rankHeader');
+    let ascending = true;
+
+    const championList = [
+        'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
                 'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion Sol.png',
                 'Aurora.png', 'Azir.png', 'Bard.png', 'BelVeth.png', 'Blitzcrank.png',
                 'Brand.png', 'Braum.png', 'Briar.png', 'Caitlyn.png', 'Camille.png',
@@ -83,7 +167,7 @@
                 'Jayce.png', 'Jhin.png', 'Jinx.png', 'KSante.png', 'KaiSa.png',
                 'Kalista.png', 'Karma.png', 'Karthus.png', 'Kassadin.png', 'Katarina.png',
                 'Kayle.png', 'Kayn.png', 'Kennen.png', 'KhaZix.png', 'Kindred.png',
-                'Kled.png', 'KogMaw.png', 'LeBlanc.png', 'Lee_Sin.png', 'Leona.png',
+                'Kled.png', 'KogMaw.png', 'LeBlanc.png', 'Lee Sin.png', 'Leona.png',
                 'Lillia.png', 'Lissandra.png', 'Lucian.png', 'Lulu.png', 'Lux.png',
                 'Malphite.png', 'Malzahar.png', 'Maokai.png', 'Master Yi.png', 'Milio.png',
                 'Miss Fortune.png', 'Mordekaiser.png', 'Morgana.png', 'Naafiri.png', 'Nami.png',
@@ -104,25 +188,124 @@
                 'Xin Zhao.png', 'Yasuo.png', 'Yone.png', 'Yorick.png', 'Yuumi.png',
                 'Zac.png', 'Zed.png', 'Zeri.png', 'Ziggs.png', 'Zilean.png',
                 'Zoe.png', 'Zyra.png'
-        ];
- 
-        images.forEach(image => {
-            const row = document.createElement('tr');
-            const championCell = document.createElement('td');
-            const gamesPlayedCell = document.createElement('td');
-            const winrateCell = document.createElement('td');
- 
-            const championImg = document.createElement('img');
-            championImg.src = `/PNG images/${image}`;
-            championImg.alt = image;
-            championCell.appendChild(championImg);
- 
-            row.appendChild(championCell);
-            row.appendChild(gamesPlayedCell);
-            row.appendChild(winrateCell);
- 
-            tableBody.appendChild(row);
+       
+    ];
+
+    // Set the current data to the default champion list
+    let currentData = championList.map((image, index) => {
+        const name = image.replace(/_/g, ' ').replace('.png', '').replace(/([A-Z])/g, ' $1').trim();
+        return [index + 1, image, name, '', '', '', '', '', ''];  // Added empty W, L, Win Percentage
+    });
+    function populateTable(data) {
+    tableBody.innerHTML = '';
+
+    data.forEach(row => {
+        const tableRow = document.createElement('tr');
+
+        const rankCell = document.createElement('td');
+        rankCell.textContent = row[0];  // Rank
+
+        const championCell = document.createElement('td');
+        const championDiv = document.createElement('div');
+        championDiv.classList.add('champion-name');
+        const championImage = document.createElement('img');
+        championImage.src = 'PNG images/' + row[1];  // Image path
+        championImage.alt = row[2];  // Champion name
+        championImage.classList.add('champion-icon');
+        championDiv.appendChild(championImage);
+        const championName = document.createElement('span');
+        championName.textContent = row[2];  // Champion name
+        championDiv.appendChild(championName);
+        championCell.appendChild(championDiv);
+
+        const kdaCell = document.createElement('td');
+        kdaCell.textContent = row[3] || '';  // KDA
+
+        const gamesCell = document.createElement('td');
+        gamesCell.textContent = row[4] || '';  // Games Played
+
+        const wCell = document.createElement('td');
+        const wins = parseInt(row[5]) || 0; // Ensure Wins is parsed as integer
+        wCell.textContent = wins;  // Wins (W)
+
+        const lCell = document.createElement('td');
+        const losses = parseInt(row[6]) || 0; // Ensure Losses is parsed as integer
+        lCell.textContent = losses;  // Losses (L)
+
+        const winPercentageCell = document.createElement('td');
+        const totalGames = wins + losses; // Total games played
+        if (totalGames > 0) {
+            const winPercentage = ((wins / totalGames) * 100).toFixed(2);
+            winPercentageCell.textContent = winPercentage + '%';  // Show win percentage
+        } else {
+            winPercentageCell.textContent = '0%';  // If no games, show 0%
+        }
+
+        tableRow.appendChild(rankCell);
+        tableRow.appendChild(championCell);
+        tableRow.appendChild(kdaCell);
+        tableRow.appendChild(gamesCell);
+        tableRow.appendChild(wCell);
+        tableRow.appendChild(lCell);
+        tableRow.appendChild(winPercentageCell);
+
+        tableBody.appendChild(tableRow);
+    });
+}
+
+function handleFile(fileInput, callback) {
+    const file = fileInput.files[0];
+
+    const reader = new FileReader();
+    reader.addEventListener("loadend", (e) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+        // Filter and map the data correctly (skip the header)
+        const filteredData = excelData.slice(1).map(row => [
+            row[0],  // Rank
+            row[1],  // Image
+            row[2],  // Champion
+            row[3],  // KDA
+            row[4],  // Games Played
+            parseInt(row[5]) || 0,  // Wins (W)
+            parseInt(row[6]) || 0   // Losses (L)
+        ]);
+
+        callback(filteredData);
+    });
+    reader.readAsArrayBuffer(file);
+}
+
+    function updateTable() {
+        if (!fileInput1.files.length || !fileInput2.files.length) return;
+
+        handleFile(fileInput1, (fileData1) => {
+            handleFile(fileInput2, (fileData2) => {
+                currentData = [...fileData1, ...fileData2];
+
+                // Remove duplicates based on champion name, and then sort by ascending order
+                currentData = currentData
+                    .filter((row, index, self) => self.findIndex(r => r[2] === row[2]) === index)
+                    .sort((a, b) => a[0] - b[0]);
+                populateTable(currentData);
+            });
         });
+    }
+
+    fileInput1.addEventListener('change', updateTable);
+    fileInput2.addEventListener('change', updateTable);
+
+    rankHeader.addEventListener('click', () => {
+        ascending = !ascending;
+        const sortedData = currentData.sort((a, b) => ascending ? a[0] - b[0] : b[0] - a[0]);
+        populateTable(sortedData);
+    });
+
+    // Populate table with default data on page load
+    populateTable(currentData);
     </script>
 </body>
 </html>
