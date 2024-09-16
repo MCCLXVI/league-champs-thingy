@@ -14,3 +14,4 @@ To do list:
 - Sort out hosting
 - Clean up code and files
 - remake the site using react and all that jazz
+- Remember to change the href in combined.html to Hub.html
