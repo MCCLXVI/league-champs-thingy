@@ -22,6 +22,7 @@
             text-align: center;
             position: relative;
             z-index: 1; /* Ensure header is above the canvas */
+            width: 100%;
         }
         nav {
             margin: 10px 0;
@@ -30,7 +31,7 @@
             display: inline-block;
             padding: 10px 20px;
             margin: 0 15px;
-            background-color: #007bff;
+            background-color: #FFD700db;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
@@ -48,9 +49,49 @@
             padding: 20px;
             position: relative;
             z-index: 1; /* Ensure main content is above the canvas */
+            width: 100%;
+        }
+        .sidebar {
+            position: absolute;
+            top: 60px; /* Adjust to sit below the header */
+            left: 0;
+            width: 200px;
+            background-color: #222;
+            color: #fff;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+            height: calc(100vh - 60px); /* Adjust for header height */
+            overflow-y: auto; /* Add scroll if content exceeds */
+            z-index: 2; /* Ensure sidebar is above the canvas */
+            transform: translateX(-100%); /* Initially hidden */
+            transition: transform 0.3s ease; /* Smooth transition */
+        }
+        .sidebar.open {
+            transform: translateX(0); /* Show sidebar */
+        }
+        .toggle-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background-color: #FFD700db;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 3; /* Ensure button is above everything */
+        }
+        .toggle-button:hover {
+            background-color: #0056b3;
+        }
+        .content {
+            margin-left: 220px; /* Space for the sidebar */
+            width: calc(100% - 220px); /* Adjust content width */
         }
         section {
-            background-color: #fff;
+            background-color: #ffffff;
             padding: 20px;
             border-radius: 5px;
             margin: 10px;
@@ -89,19 +130,26 @@
             <a href="combined.html" class="button">Combined</a>
         </nav>
     </header>
+    <button class="toggle-button" id="toggleButton">☰</button>
+    <div class="sidebar" id="sidebar">
+        <h2>Sidebar</h2>
+        <p>Links or content can go here.</p>
+    </div>
     <main>
-        <section id="Milo">
-            <h2>Milo</h2>
-            <p>Milo's section of the website to store his data.</p>
-        </section>
-        <section id="Callum">
-            <h2>Callum</h2>
-            <p>Callum's section of the website to store his data.</p>
-        </section>
-        <section id="Combined">
-            <h2>Combined</h2>
-            <p>This is the section of the website to combine our data and achieved overall percentages.</p>
-        </section>
+        <div class="content">
+            <section id="Milo">
+                <h2>Milo</h2>
+                <p>Milo's section of the website to store his data.</p>
+            </section>
+            <section id="Callum">
+                <h2>Callum</h2>
+                <p>Callum's section of the website to store his data.</p>
+            </section>
+            <section id="Combined">
+                <h2>Combined</h2>
+                <p>This is the section of the website to combine our data and achieve overall percentages.</p>
+            </section>
+        </div>
     </main>
     <footer>
         <p>&copy; Skibidi</p>
@@ -217,26 +265,16 @@
                 const bgVertex = `
                     varying vec2 vUv;
                     uniform float u_time;
-                    varying float vElevation;
                     varying vec3 vNormal;
 
-                    float oscillate(float time, float minVal, float maxVal) {
-                        float sineWave = sin(time);
-                        float normalizedSine = (sineWave + 1.0) / 2.0;
-                        return mix(minVal, maxVal, normalizedSine);
-                    }
-                    
                     void main() {
                         vUv = uv;
-                        vNormal = normalize(normalMatrix * normal);
                         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
                     }
                 `;
                 const bgFragment = `
                     varying vec2 vUv;
-                    uniform float u_time;
-                    varying vec3 vNormal;
-                    
+
                     void main() {
                         gl_FragColor = vec4(1.0); 
                     }
@@ -267,13 +305,20 @@
                     requestAnimationFrame(animate);
 
                     customMaterial.uniforms.u_time.value = performance.now() / 1000;
-                    backgroundShader.uniforms.u_time.value = performance.now() / 1000;
 
                     renderer.render(scene, camera);
                 }
                 animate();
             }
         );
+
+        // Sidebar toggle functionality
+        const toggleButton = document.getElementById('toggleButton');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
     </script>
 </body>
 </html>
