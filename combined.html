@@ -149,13 +149,13 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
-    const fileInput1 = document.getElementById('fileInput1');
-    const fileInput2 = document.getElementById('fileInput2');
-    const tableBody = document.getElementById('tableBody');
-    const rankHeader = document.getElementById('rankHeader');
-    let ascending = true;
-
-    const championList = [
+        const fileInput1 = document.getElementById('fileInput1');
+        const fileInput2 = document.getElementById('fileInput2');
+        const tableBody = document.getElementById('tableBody');
+        const rankHeader = document.getElementById('rankHeader');
+        let ascending = true;
+        
+        const championList = [
         'Aatrox.png', 'Ahri.png', 'Akali.png', 'Akshan.png', 'Alistar.png',
                 'Amumu.png', 'Annie.png', 'Aphelios.png', 'Ashe.png', 'Aurelion Sol.png',
                 'Aurora.png', 'Azir.png', 'Bard.png', 'BelVeth.png', 'Blitzcrank.png',
@@ -190,121 +190,141 @@
                 'Xin Zhao.png', 'Yasuo.png', 'Yone.png', 'Yorick.png', 'Yuumi.png',
                 'Zac.png', 'Zed.png', 'Zeri.png', 'Ziggs.png', 'Zilean.png',
                 'Zoe.png', 'Zyra.png'
-       
-    ];
-
-
-    let currentData = championList.map((image, index) => {
-        const name = image.replace(/_/g, ' ').replace('.png', '').replace(/([A-Z])/g, ' $1').trim();
-        return [index + 1, image, name, '', '', '', '', '', ''];  
-    });
-    function populateTable(data) {
-    tableBody.innerHTML = '';
-
-    data.forEach(row => {
-        const tableRow = document.createElement('tr');
-
-        const rankCell = document.createElement('td');
-        rankCell.textContent = row[0]; 
-
-        const championCell = document.createElement('td');
-        const championDiv = document.createElement('div');
-        championDiv.classList.add('champion-name');
-        const championImage = document.createElement('img');
-        championImage.src = 'PNG images/' + row[1]; 
-        championImage.alt = row[2];  
-        championImage.classList.add('champion-icon');
-        championDiv.appendChild(championImage);
-        const championName = document.createElement('span');
-        championName.textContent = row[2];  
-        championDiv.appendChild(championName);
-        championCell.appendChild(championDiv);
-
-        const kdaCell = document.createElement('td');
-        kdaCell.textContent = row[3] || '';  
-
-        const gamesCell = document.createElement('td');
-        gamesCell.textContent = row[4] || '';  
-
-        const wCell = document.createElement('td');
-        const wins = parseInt(row[5]) || 0; 
-        wCell.textContent = wins;  
-
-        const lCell = document.createElement('td');
-        const losses = parseInt(row[6]) || 0; 
-        lCell.textContent = losses;  
-
-        const winPercentageCell = document.createElement('td');
-        const totalGames = wins + losses; 
-        if (totalGames > 0) {
-            const winPercentage = ((wins / totalGames) * 100).toFixed(2);
-            winPercentageCell.textContent = winPercentage + '%'; 
-        } else {
-            winPercentageCell.textContent = '0%';  
-        }
-
-        tableRow.appendChild(rankCell);
-        tableRow.appendChild(championCell);
-        tableRow.appendChild(kdaCell);
-        tableRow.appendChild(gamesCell);
-        tableRow.appendChild(wCell);
-        tableRow.appendChild(lCell);
-        tableRow.appendChild(winPercentageCell);
-
-        tableBody.appendChild(tableRow);
-    });
-}
-
-function handleFile(fileInput, callback) {
-    const file = fileInput.files[0];
-
-    const reader = new FileReader();
-    reader.addEventListener("loadend", (e) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
-
-        const filteredData = excelData.slice(1).map(row => [
-            row[0],  
-            row[1],  
-            row[2],  
-            row[3],  
-            row[4],  
-            parseInt(row[5]) || 0, 
-            parseInt(row[6]) || 0   
-        ]);
-
-        callback(filteredData);
-    });
-    reader.readAsArrayBuffer(file);
-}
-
-    function updateTable() {
-        if (!fileInput1.files.length || !fileInput2.files.length) return;
-
-        handleFile(fileInput1, (fileData1) => {
-            handleFile(fileInput2, (fileData2) => {
-                currentData = [...fileData1, ...fileData2];
-
-
-                currentData = currentData
-                    .filter((row, index, self) => self.findIndex(r => r[2] === row[2]) === index)
-                    .sort((a, b) => a[0] - b[0]);
-                populateTable(currentData);
-            });
+        ];
+        
+        
+        let currentData = championList.map((image, index) => {
+            const name = image.replace(/_/g, ' ').replace('.png', '').replace(/([A-Z])/g, ' $1').trim();
+            return [index + 1, image, name, 0, 0, 0, 0]; 
         });
-    }
-
-    fileInput1.addEventListener('change', updateTable);
-    fileInput2.addEventListener('change', updateTable);
-
-    rankHeader.addEventListener('click', () => {
-        ascending = !ascending;
-        const sortedData = currentData.sort((a, b) => ascending ? a[0] - b[0] : b[0] - a[0]);
-        populateTable(sortedData);
-    });
-    populateTable(currentData);
-    </script>
+        
+        function populateTable(data) {
+            tableBody.innerHTML = '';
+        
+            data.forEach(row => {
+                const tableRow = document.createElement('tr');
+        
+                const rankCell = document.createElement('td');
+                rankCell.textContent = row[0];
+        
+                const championCell = document.createElement('td');
+                const championDiv = document.createElement('div');
+                championDiv.classList.add('champion-name');
+                const championImage = document.createElement('img');
+                championImage.src = 'PNG images/' + row[1]; 
+                championImage.alt = row[2];  
+                championImage.classList.add('champion-icon');
+                championDiv.appendChild(championImage);
+                const championName = document.createElement('span');
+                championName.textContent = row[2];  
+                championDiv.appendChild(championName);
+                championCell.appendChild(championDiv);
+        
+                const kdaCell = document.createElement('td');
+                kdaCell.textContent = (row[3] || 0).toFixed(2); 
+        
+                const gamesCell = document.createElement('td');
+                gamesCell.textContent = row[4];
+        
+                const wCell = document.createElement('td');
+                wCell.textContent = row[5]; 
+        
+                const lCell = document.createElement('td');
+                lCell.textContent = row[6]; 
+        
+                const winPercentageCell = document.createElement('td');
+                const totalGames = row[5] + row[6]; 
+                if (totalGames > 0) {
+                    const winPercentage = ((row[5] / totalGames) * 100).toFixed(2);
+                    winPercentageCell.textContent = winPercentage + '%';
+                } else {
+                    winPercentageCell.textContent = '0%';
+                }
+        
+                tableRow.appendChild(rankCell);
+                tableRow.appendChild(championCell);
+                tableRow.appendChild(kdaCell);
+                tableRow.appendChild(gamesCell);
+                tableRow.appendChild(wCell);
+                tableRow.appendChild(lCell);
+                tableRow.appendChild(winPercentageCell);
+        
+                tableBody.appendChild(tableRow);
+            });
+        }
+        
+        function handleFile(fileInput, callback) {
+            const file = fileInput.files[0];
+        
+            const reader = new FileReader();
+            reader.addEventListener("loadend", (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const excelData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+        
+                const filteredData = excelData.slice(1).map(row => [
+                    row[0],  
+                    row[1],  
+                    row[2],  
+                    parseFloat(row[3]) || 0, 
+                    parseInt(row[4]) || 0,   
+                    parseInt(row[5]) || 0,   
+                    parseInt(row[6]) || 0   
+                ]);
+        
+                callback(filteredData);
+            });
+            reader.readAsArrayBuffer(file);
+        }
+        
+        function updateTable() {
+            if (!fileInput1.files.length || !fileInput2.files.length) return;
+        
+            handleFile(fileInput1, (fileData1) => {
+                handleFile(fileInput2, (fileData2) => {
+                    let combinedData = [...fileData1];
+        
+                   
+                    fileData2.forEach(row2 => {
+                        const match = combinedData.find(row1 => row1[2] === row2[2]); 
+                        if (match) {
+                            
+                            const totalGamesBefore = match[4]; 
+                            const totalGamesAfter = row2[4];   
+                            const totalGames = totalGamesBefore + totalGamesAfter;
+                            
+                            if (totalGames > 0) {
+                                match[3] = ((match[3] * totalGamesBefore) + (row2[3] * totalGamesAfter)) / totalGames; 
+                            }
+                            
+                            
+                            match[4] += row2[4]; 
+                            match[5] += row2[5]; 
+                            match[6] += row2[6]; 
+                        } else {
+                            combinedData.push(row2); 
+                        }
+                    });
+        
+                    
+                    combinedData = combinedData.sort((a, b) => a[0] - b[0]);
+                    populateTable(combinedData);
+                });
+            });
+        }
+        
+        fileInput1.addEventListener('change', updateTable);
+        fileInput2.addEventListener('change', updateTable);
+        
+        rankHeader.addEventListener('click', () => {
+            ascending = !ascending;
+            const sortedData = currentData.sort((a, b) => ascending ? a[0] - b[0] : b[0] - a[0]);
+            populateTable(sortedData);
+        });
+        
+        populateTable(currentData);
+        </script>
+        
 </body>
 </html>
