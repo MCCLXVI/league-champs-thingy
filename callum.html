@@ -21,11 +21,11 @@
             background-color: #FFD700db;
             color: rgb(61, 59, 59);
             width: 100%;
-            padding: 15px;
+            padding: 15px 0;
             text-align: center;
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 2;
         }
 
         .navbar h1 {
@@ -103,14 +103,22 @@
 
         .sortable {
             cursor: pointer;
+            background: none;
+            color: inherit;
+            border: none;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
         }
 
         .ascending::after {
             content: ' ▲';
+            content: ' ▲' / '';
         }
 
         .descending::after {
             content: ' ▼';
+            content: ' ▼' / '';
         }
 
         .back-to-main-page {
@@ -142,7 +150,9 @@
     <table id="championTable">
         <thead>
             <tr>
-                <th id="rankHeader" class="sortable">Rank</th> 
+                <th>
+                    <button id="rankHeader" class="sortable ascending">Rank</button>
+                </th>
                 <th>Champion</th>
                 <th>KDA</th>
                 <th>Games Played</th>
@@ -305,6 +315,8 @@
 
     rankHeader.addEventListener('click', () => {
         ascending = !ascending;
+        rankHeader.classList.toggle('ascending');
+        rankHeader.classList.toggle('descending');
         const sortedData = currentData.sort((a, b) => ascending ? a[0] - b[0] : b[0] - a[0]);
         populateTable(sortedData);
     });
