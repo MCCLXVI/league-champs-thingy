@@ -13,7 +13,8 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow: hidden; 
+            background-image: url('/PNG images/The Poro League.jpg');
+            background-size: cover;
         }
         header {
             background-color: #000000;
@@ -21,7 +22,7 @@
             padding: 10px 0;
             text-align: center;
             position: relative;
-            z-index: 1; 
+            z-index: 1;
             width: 100%;
         }
         nav {
@@ -50,35 +51,29 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
             position: relative;
             z-index: 1; 
             width: 100%;
         }
         .sidebar {
-            position: relative;
-            top: 11%;
-            bottom:auto;
-            left: 0;
+            position: absolute;
+            inset: 0 0 0;
             width: 10%;
             background-color: #222;
             color: #ffffff;
             padding: 15px;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-            height: calc(86vh - 4vh); 
-            overflow-y: auto; 
-            z-index: 2; 
-            transform: translateX(-100%); 
-            transition: transform 0.3s ease; 
-            z-index: 0;
+            z-index: 2;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease, opacity 200ms ease;
+            opacity: 0;
+            
         }
         .sidebar.open {
-            transform: translateX(0); 
+            transform: translateX(0);
+            opacity: 1;
         }
         .toggle-button {
-            position: absolute;
-            top: 4%;
-            left: 2.5%;
             width: 40px;
             height: 40px;
             background-color: #FFD700db;
@@ -87,7 +82,8 @@
             color: #000000;
             font-size: 20px;
             cursor: pointer;
-            z-index: 3;
+            position: absolute;
+            left: 2.5%;
         }
         .toggle-button:hover {
             background-color: #0056b3;
@@ -95,8 +91,11 @@
             transform: scale(1.2)
         }
         .content {
-            margin-left: 1550px; 
-            width: calc(100% - 220px); 
+            margin: auto;
+            width: calc(100% - 220px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         section {
             background-color: #FFD700db;
@@ -107,21 +106,18 @@
             max-width: 600px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            left:  0%;
-            position:relative;
-            top:-60vh;
-
-           
         }
         footer {
             background-color: #000000;
             color: #fff;
             text-align: center;
             padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            z-index: 1; 
+        }
+        .link {
+            color: #006eff;
+        }
+        .link:visited {
+            color: #ff00ff;
         }
         #container {
             position: absolute;
@@ -129,86 +125,65 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 0; 
+            z-index: 0;
         }
-        body {
-            background-image: url('PNG images/The\ Poro\ League.jpg');
-            background-repeat: no-repeat;
-            background-attachment: fixed; 
-            background-size: 100% 100%;
-          }
-            
+        h1 {
+            text-transform: uppercase;
+        }
         </style>
 </head>
 <body>
-    <div id="container"></div>
     <header>
-        <h1>ALL LOL CHAMPS PERSONAL WINRATE</h1>
+        <h1>All LOL Champs Personal Winrate</h1>
+        <button class="toggle-button" id="toggleButton">☰</button>
         <nav>
             <a href="milo.html" class="button">Milo</a>
             <a href="callum.html" class="button">Callum</a>
             <a href="combined.html" class="button">Combined</a>
         </nav>
     </header>
-    <button class="toggle-button" id="toggleButton">☰</button>
-    <div class="sidebar" id="sidebar">
-        <h2>Sidebar</h2>
-        <p>Links or content can go here.</p>
-    </div>
     <main>
+        <div class="sidebar" id="sidebar">
+            <h2>Sidebar</h2>
+            <p>Links or content can go here.</p>
+        </div>
         <div class="content">
             <section id="Milo">
                 <h2>Milo</h2>
                 <p>Milo's section of the website to store his data.</p>
+                <p><a class="link" href="milo.html">Link to page</a></p>
             </section>
             <section id="Callum">
                 <h2>Callum</h2>
                 <p>Callum's section of the website to store his data.</p>
+                <p><a class="link" href="callum.html">Link to page</a></p>
             </section>
             <section id="Combined">
                 <h2>Combined</h2>
                 <p>This is the section of the website to combine our data and achieve overall percentages.</p>
+                <p><a class="link" href="combined.html">Link to page</a></p>
             </section>
         </div>
     </main>
     <footer>
         <p>&copy; Skibidi</p>
+        <p>
+            View our <a class="link" href="https://github.com/CT126/league-champs-thingy" target="_blank">GitHub repository</a>.
+        </p>
     </footer>
- 
-    <script type="module">
-        import * as THREE from 'https://cdn.skypack.dev/three@0.139.2';
-        import orbitControlsEs6 from 'https://cdn.skypack.dev/orbit-controls-es6@2.0.1';
-
-        const canvasContainer = document.getElementById("container");
-
-        const scene = new THREE.Scene();
-
-        const camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
-        );
-        camera.position.set(0, -200, 0);
-
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x080808);
-        canvasContainer.appendChild(renderer.domElement);
-
-        new orbitControlsEs6(camera, renderer.domElement);
-
-        window.addEventListener("resize", () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
+    <script>
         const toggleButton = document.getElementById('toggleButton');
         const sidebar = document.getElementById('sidebar');
-
+        
         toggleButton.addEventListener('click', () => {
             sidebar.classList.toggle('open');
+
+            // This makes the sidebar close when `Esc` is pressed, etc
+            const closeWatcher = new CloseWatcher();
+            closeWatcher.addEventListener('cancel', () => {
+                sidebar.classList.remove('open');
+                closeWatcher.destroy();
+            });
         });
     </script>
 </body>
