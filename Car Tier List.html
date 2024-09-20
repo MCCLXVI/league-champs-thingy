@@ -38,7 +38,8 @@
             border-radius: 5px;
             font-weight: bold;
             align-items: center;
-            width: 10vh;
+            cursor: pointer;
+            text-align: center;
         }
         .button:hover {
             background-color: #0056b3;
@@ -130,6 +131,16 @@
         h1 {
             text-transform: uppercase;
         }
+        .uploaded-image {
+            max-width: 100px;
+            height: auto;
+        }
+        .inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -154,26 +165,29 @@
         <div class="content">
             <section>
                 <h2>Welcome to the Car Tier List</h2>
-                <p>Here you can find a list of cars categorized by their performance, features, and overall value.</p>
-                <p>Stay tuned for the latest updates!</p>
+                <p>This is where you can create your own teir list of your favourite cars (cats).</p>
+                <p>This isnt supposed to be serious</p>
             </section>
 
             <section>
                 <h2>Edit Your Tier List</h2>
-                <input type="text" id="carName" placeholder="Car Name">
-                <input type="text" id="carTier" placeholder="Tier (e.g., A, B, C)">
-                <button id="addCarButton" class="button">Add Car</button>
+                <div class="inputs">
+                    <input type="text" id="carName" placeholder="Car Name (we mean cat)">
+                    <input type="text" id="carTier" placeholder="Tier (e.g., A, B, C)">
+                    <input type="file" id="imageUpload" accept="image/*">
+                </div>
+                <button id="uploadButton" class="button">Add Car with Image</button>
 
                 <table class="tier-list">
                     <thead>
                         <tr>
                             <th>Car Name</th>
                             <th>Tier</th>
+                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="tierListBody">
-                        <!-- Car entries will be added here -->
                     </tbody>
                 </table>
             </section>
@@ -181,7 +195,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Your Car Site</p>
+        <p>&copy; Skibidi</p>
     </footer>
 
     <script>
@@ -192,27 +206,35 @@
             sidebar.classList.toggle('open');
         });
 
-        const addCarButton = document.getElementById('addCarButton');
+        const addCarButton = document.getElementById('uploadButton');
         const carNameInput = document.getElementById('carName');
         const carTierInput = document.getElementById('carTier');
+        const imageUpload = document.getElementById('imageUpload');
         const tierListBody = document.getElementById('tierListBody');
 
         addCarButton.addEventListener('click', () => {
             const carName = carNameInput.value.trim();
             const carTier = carTierInput.value.trim();
+            const file = imageUpload.files[0];
 
-            if (carName && carTier) {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${carName}</td>
-                    <td>${carTier}</td>
-                    <td><button class="button" onclick="removeCar(this)">Remove</button></td>
-                `;
-                tierListBody.appendChild(row);
-                carNameInput.value = '';
-                carTierInput.value = '';
+            if (carName && carTier && file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${carName}</td>
+                        <td>${carTier}</td>
+                        <td><img src="${e.target.result}" class="uploaded-image" alt="Car Image"></td>
+                        <td><button class="button" onclick="removeCar(this)">Remove</button></td>
+                    `;
+                    tierListBody.appendChild(row);
+                    carNameInput.value = '';
+                    carTierInput.value = '';
+                    imageUpload.value = '';
+                };
+                reader.readAsDataURL(file);
             } else {
-                alert('Please enter both car name and tier.');
+                alert('Please enter car name, tier, and select an image.');
             }
         });
 
