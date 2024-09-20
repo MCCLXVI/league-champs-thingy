@@ -162,7 +162,7 @@
         toggleButton.addEventListener('click', () => {
             sidebar.classList.toggle('open');
 
-            // This makes the sidebar close when `Esc` is pressed, etc
+           
             const closeWatcher = new CloseWatcher();
             closeWatcher.addEventListener('cancel', () => {
                 sidebar.classList.remove('open');
