@@ -4,6 +4,5 @@
 
 To do list:
 - Make an items page
-- Create an about page
 - Do not link the edgar website in the about page
-- create sidebar in hub to have button for car list
+
