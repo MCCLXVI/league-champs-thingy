@@ -5,4 +5,4 @@
 To do list:
 - Make an items page
 - Do not link the edgar website in the about page
-
+-add win/loss counter side button
