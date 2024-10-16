@@ -7,3 +7,5 @@ To do list:
 - Do not link the edgar website in the about page
 - add win/loss counter side button
 - remake it in typescript + react
+- need to npm install xlsx and npm install --save-dev @types/xlsx
+
